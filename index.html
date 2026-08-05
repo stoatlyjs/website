@@ -1,263 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>stoatly.js — string‑based command framework</title>
-  <!-- Font & base styling -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background: #0e0e12;
-      color: #e4e4e7;
-      font-family: 'Inter', -apple-system, system-ui, sans-serif;
-      line-height: 1.6;
-      padding: 2rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    /* header / title */
-    .title-block {
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid #2a2a32;
-      padding-bottom: 1.5rem;
-    }
-
-    .title-block h1 {
-      font-size: 2.8rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      background: linear-gradient(145deg, #f0f0f5, #b0b0c0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      display: inline-block;
-    }
-
-    .title-block .tagline {
-      color: #8f8f9e;
-      margin-top: 0.3rem;
-      font-size: 1.2rem;
-    }
-
-    .badge-row {
-      margin-top: 0.75rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .badge {
-      background: #1e1e26;
-      padding: 0.25rem 0.9rem;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      color: #c0c0cf;
-      border: 1px solid #2f2f3a;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .badge svg {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
-
-    a.badge:hover {
-      background: #282833;
-      border-color: #4a4a5a;
-    }
-
-    /* cards / sections */
-    .card {
-      background: #16161e;
-      border-radius: 18px;
-      padding: 1.8rem 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid #26262e;
-    }
-
-    .card h2 {
-      font-size: 1.5rem;
-      font-weight: 500;
-      margin-bottom: 1.2rem;
-      letter-spacing: -0.01em;
-      color: #d8d8e5;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .card h2 code {
-      background: #23232b;
-      padding: 0.1rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 400;
-      color: #bcbcd0;
-    }
-
-    p, li {
-      color: #c8c8d6;
-    }
-
-    code, pre {
-      font-family: 'JetBrains Mono', 'Fira Code', monospace;
-      font-size: 0.9rem;
-    }
-
-    pre {
-      background: #0c0c12;
-      padding: 1.2rem 1.5rem;
-      border-radius: 14px;
-      overflow-x: auto;
-      border: 1px solid #25252e;
-      margin: 1.2rem 0;
-      color: #e1e1ec;
-      tab-size: 2;
-    }
-
-    pre code {
-      background: transparent;
-      padding: 0;
-      font-size: 0.9rem;
-    }
-
-    code {
-      background: #1b1b24;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      color: #d4d4e5;
-      font-size: 0.85rem;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #26262e;
-      margin: 1.8rem 0;
-    }
-
-    .function-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem 2rem;
-      margin: 0.8rem 0 0.2rem;
-    }
-
-    .function-item {
-      display: flex;
-      align-items: baseline;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-      padding: 0.2rem 0;
-    }
-
-    .function-item code {
-      background: #191922;
-      white-space: nowrap;
-    }
-
-    .function-item .desc {
-      color: #a8a8ba;
-      font-size: 0.9rem;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-    }
-
-    th {
-      text-align: left;
-      padding: 0.5rem 0.3rem 0.5rem 0;
-      font-weight: 500;
-      color: #b0b0c4;
-      border-bottom: 1px solid #2a2a34;
-    }
-
-    td {
-      padding: 0.5rem 0.3rem 0.5rem 0;
-      border-bottom: 1px solid #1f1f28;
-      vertical-align: top;
-    }
-
-    td:first-child {
-      white-space: nowrap;
-      font-weight: 450;
-      color: #d4d4e6;
-    }
-
-    .inline-code {
-      background: #1a1a24;
-      padding: 0.1rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      color: #d0d0e0;
-    }
-
-    .footer {
-      margin-top: 3rem;
-      color: #6a6a7e;
-      font-size: 0.9rem;
-      border-top: 1px solid #1f1f28;
-      padding-top: 2rem;
-      text-align: center;
-    }
-
-    @media (max-width: 700px) {
-      body { padding: 1rem; }
-      .card { padding: 1.2rem; }
-      .function-grid { grid-template-columns: 1fr; }
-      .title-block h1 { font-size: 2.2rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>stoatly.js — a string-based command framework for Stoat</title>
+<meta name="description" content="stoatly.js is a string-based command framework for Stoat. Write bot commands as $functions — $if, $sendMessage, $setVar — no build step, no boilerplate.">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
 
-  <!-- TITLE -->
-  <div class="title-block">
-    <h1>stoatly.js</h1>
-    <div class="tagline">string‑based command framework for Stoat · built on <code>stoat.js</code></div>
-    <div class="badge-row">
-      <span class="badge"><svg viewBox="0 0 16 16"><path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14.5c-3.6 0-6.5-2.9-6.5-6.5S4.4 1.5 8 1.5s6.5 2.9 6.5 6.5-2.9 6.5-6.5 6.5z"/><path d="M11.5 7.5l-3-2.5v2H6v2h2.5v2l3-2.5z"/></svg> v0.1.0</span>
-      <span class="badge"><svg viewBox="0 0 16 16"><path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 14.5c-3.6 0-6.5-2.9-6.5-6.5S4.4 1.5 8 1.5s6.5 2.9 6.5 6.5-2.9 6.5-6.5 6.5z"/><path d="M11.5 7.5l-3-2.5v2H6v2h2.5v2l3-2.5z"/></svg> CI passing</span>
-      <span class="badge">MIT License</span>
+<header class="nav">
+  <div class="wrap nav-row">
+    <div class="brand">stoatly.js</div>
+    <nav class="links">
+      <a href="#quicklook">Quick look</a>
+      <a href="#install">Install</a>
+      <a href="#reference">Functions</a>
+      <a href="#custom">Custom</a>
+      <a href="#layout">Source</a>
+    </nav>
+    <div class="pill-row">
+      <a class="pill" href="https://www.npmjs.com/package/stoatly.js" target="_blank" rel="noopener">npm package</a>
+      <a class="pill" href="https://github.com/stoatlyjs/stoatly.js/actions/workflows/ci.yml" target="_blank" rel="noopener">CI</a>
+      <a class="pill" href="https://github.com/stoatlyjs/stoatly.js/blob/main/LICENSE" target="_blank" rel="noopener">MIT</a>
+      <a class="pill" href="https://stoatly.js.org" target="_blank" rel="noopener">stoatly.js.org</a>
     </div>
   </div>
+</header>
 
-  <!-- INTRO -->
-  <div class="card">
-    <p style="font-size:1.05rem; margin-bottom:0.6rem;">
-      A <strong>string‑based command framework</strong> for 
-      <a href="https://stoat.chat" style="color:#9b9bf0; text-decoration:none;">Stoat</a> 
-      (the open‑source chat platform formerly known as Revolt), 
-      built on the official <code>stoat.js</code> client.
-    </p>
-    <p style="margin-bottom:0.8rem;">
-      Instead of writing raw event handlers, write commands as strings containing <code>$functions</code>:
-    </p>
-    <pre><code>import { StoatlyClient } from "stoatly.js";
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="mono" style="font-size:13px; text-transform:uppercase; letter-spacing:.05em;">String-based command framework for Stoat</p>
+        <h1 class="headline">$build[ the bot framework that reads like the messages it sends ]</h1>
+        <p class="hero-sub">stoatly.js turns Stoat bot commands into short, readable <code>$function</code> strings.</p>
+
+        <div class="cta-row">
+          <div class="install-chip">
+            <span class="cmd"><span class="flag">$</span> npm install stoatly.js</span>
+            <button class="copy-btn" data-copy="npm install stoatly.js">Copy</button>
+          </div>
+        </div>
+        <div class="cta-row" style="margin-top:-6px;">
+          <a class="btn" href="#quicklook">See it in three lines</a>
+          <a class="btn ghost" href="#reference">Browse functions</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="console">
+          <div class="console-head">
+            <span class="chan"># general</span>
+            <select id="presetSelect" aria-label="Load an example command">
+              <option value="ping">ping</option>
+              <option value="say">say</option>
+              <option value="score" selected>score</option>
+              <option value="blank">blank</option>
+            </select>
+          </div>
+          <div class="console-body" id="consoleBody"></div>
+          <div class="console-foot">
+            <span class="field-label">command code</span>
+            <textarea id="codeInput" spellcheck="false"></textarea>
+            <span class="field-label">message someone sends in #general</span>
+            <div class="msg-row">
+              <input id="msgInput" type="text" spellcheck="false">
+              <button class="run-btn" id="runBtn">Run ▸</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK LOOK -->
+  <section class="section reveal" id="quicklook">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Instant setup in three commands.</h2>
+        <p>Every command is a <code>name</code> and a <code>code</code> string. Hit "Try it live" to load any of them into the console above.</p>
+      </div>
+      <div class="tabbar" role="tablist">
+        <button class="tabbtn active" data-tab="ping">ping</button>
+        <button class="tabbtn" data-tab="say">say</button>
+        <button class="tabbtn" data-tab="score">score</button>
+      </div>
+
+      <div class="tab-panel active" data-panel="ping">
+        <div class="codeblock-wrap">
+          <div class="codeblock">client.command({
+  name: <span class="cm">"ping"</span>,
+  code: <span class="cm">"Pong! <span class="fn">$ping</span> ms"</span>,
+});</div>
+          <button class="copy-btn" data-copy='client.command({ name: "ping", code: "Pong! $ping ms" });'>Copy</button>
+        </div>
+        <div class="try-live"><button class="btn ghost" data-load-preset="ping">Try it live ↑</button></div>
+      </div>
+
+      <div class="tab-panel" data-panel="say">
+        <div class="codeblock-wrap">
+          <div class="codeblock">client.command({
+  name: <span class="cm">"say"</span>,
+  aliases: [<span class="cm">"echo"</span>],
+  code: <span class="cm">"<span class="fn">$onlyIf</span><span class="br">[</span>$argsCount>0<span class="sep">;</span>You need to give me something to say!<span class="br">]</span><span class="fn">$sendMessage</span><span class="br">[</span>$args<span class="br">]</span>"</span>,
+});</div>
+          <button class="copy-btn" data-copy='client.command({ name: "say", aliases: ["echo"], code: "$onlyIf[$argsCount>0;You need to give me something to say!]$sendMessage[$args]" });'>Copy</button>
+        </div>
+        <div class="try-live"><button class="btn ghost" data-load-preset="say">Try it live ↑</button></div>
+      </div>
+
+      <div class="tab-panel" data-panel="score">
+        <div class="codeblock-wrap">
+          <div class="codeblock">client.command({
+  name: <span class="cm">"score"</span>,
+  code: <span class="cm">`
+    <span class="fn">$if</span><span class="br">[</span>$args[0]==add<span class="sep">;</span>
+      <span class="fn">$addVar</span><span class="br">[</span>score<span class="sep">;</span>1<span class="sep">;</span>$authorID<span class="br">]</span>You're now at <span class="fn">$getVar</span><span class="br">[</span>score<span class="sep">;</span>0<span class="sep">;</span>$authorID<span class="br">]</span> points!<span class="sep">;</span>
+      Your score is <span class="fn">$getVar</span><span class="br">[</span>score<span class="sep">;</span>0<span class="sep">;</span>$authorID<span class="br">]</span>
+    <span class="br">]</span>
+  `</span>,
+});</div>
+          <button class="copy-btn" data-copy='client.command({ name: "score", code: `\n    $if[$args[0]==add;\n      $addVar[score;1;$authorID]You are now at $getVar[score;0;$authorID] points!;\n      Your score is $getVar[score;0;$authorID]\n    ]\n  ` });'>Copy</button>
+        </div>
+        <div class="try-live"><button class="btn ghost" data-load-preset="score">Try it live ↑</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="section reveal" id="install">
+    <div class="wrap install-grid">
+      <div>
+        <div class="section-head">
+          <h2>Install</h2>
+          <p>One package. stoat.js comes along as a dependency, pinned to a known-good version.</p>
+        </div>
+        <div class="install-chip" style="display:inline-flex;">
+          <span class="cmd"><span class="flag">$</span> npm install stoatly.js</span>
+          <button class="copy-btn" data-copy="npm install stoatly.js">Copy</button>
+        </div>
+        <div class="note-box">stoat.js ships as a dependency of stoatly.js, currently pinned to <code>^7.3.6</code>. You don't need to install it yourself, though <code>client.client</code> gives you the raw instance if you ever need it directly.</div>
+      </div>
+      <div>
+        <ul class="req-list">
+          <li><span><strong>Node.js v22.15.0+</strong> - required by stoat.js itself. Deno v2.2+ also works.</span></li>
+          <li><span><strong>ES modules only</strong> - stoatly.js ships as <code>"type": "module"</code>. Use <code>import</code>, not <code>require()</code>.</span></li>
+          <li><span><strong>CommonJS project?</strong> Switch your own <code>package.json</code> to <code>"type": "module"</code>, or load stoatly.js with a dynamic <code>import("stoatly.js")</code>.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFERENCE -->
+  <section class="section reveal" id="reference">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Every built-in function</h2>
+        <p>Grouped the way you'll reach for them: reading context, taking action, branching logic, storing state, and general-purpose utilities. Search or filter by category.</p>
+      </div>
+      <div class="ref-controls">
+        <input class="search-box" id="refSearch" type="text" placeholder="Search functions — e.g. var, math, reply…">
+        <button class="chip active" data-cat="all">All</button>
+        <button class="chip" data-cat="context">Context</button>
+        <button class="chip" data-cat="actions">Actions</button>
+        <button class="chip" data-cat="logic">Logic</button>
+        <button class="chip" data-cat="variables">Variables</button>
+        <button class="chip" data-cat="utility">Utility</button>
+        <span id="refCount"></span>
+      </div>
+      <div id="refList"></div>
+      <div class="ref-empty" id="refEmpty">No functions match that search.</div>
+    </div>
+  </section>
+
+  <!-- CUSTOM FUNCTIONS -->
+  <section class="section reveal" id="custom">
+    <div class="wrap two-col">
+      <div>
+        <div class="section-head">
+          <h2>Bring your own functions</h2>
+          <p>Anything the built-ins don't cover, you add yourself, same <code>$name[args]</code> syntax, your own logic.</p>
+        </div>
+        <div class="codeblock-wrap">
+          <div class="codeblock">client.addFunction({
+  name: <span class="cm">"double"</span>,
+  execute: (args) => String(Number(args[0]) * 2),
+});</div>
+          <button class="copy-btn" data-copy='client.addFunction({ name: "double", execute: (args) => String(Number(args[0]) * 2) });'>Copy</button>
+        </div>
+      </div>
+      <div style="padding-top:28px;">
+        <p>Need control over <em style="font-style:italic;color:var(--snow);">when</em> your arguments get evaluated, the way <code>$if</code> only evaluates the branch it takes? Set <code>lazy: true</code> and read the raw argument nodes yourself:</p>
+        <div class="codeblock-wrap">
+          <div class="codeblock">execute: (rawArgNodes, ctx, evalNodes) => {
+  <span class="cm">// evalNodes(node) when you decide to</span>
+}</div>
+          <button class="copy-btn" data-copy='execute: (rawArgNodes, ctx, evalNodes) => { /* evalNodes(node) when you decide to */ }'>Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ESCAPE HATCH -->
+  <section class="section reveal" id="custom">
+    <div class="wrap">
+      <div>
+        <div class="section-head">
+          <h2>Nothing is hidden from you</h2>
+          <p>stoatly.js wraps stoat.js, it doesn't replace it. Drop down to raw events whenever a $function isn't enough.</p>
+        </div>
+        <div class="codeblock-wrap">
+          <div class="codeblock">client.on("messageCreate", (message) => {
+  // full access to the underlying stoat.js Message object
+});</div>
+          <button class="copy-btn" data-copy='client.on("messageCreate", (message) => {
+  // full access to the underlying stoat.js Message object
+});'>Copy</button>
+        </div>
+      </div>
+      <div style="padding-top:28px;">
+        <p>client.client is the underlying stoat.js Client instance. Its users, channels, and messages are reactive under the hood, read straight from it and it stays in sync.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECT LAYOUT -->
+  <section class="section reveal" id="layout">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Bring your Bot Online</h2>
+        <p>Get your bot token, start building your bot.</p>
+      </div>
+      <div class="codeblock-wrap">
+          <div class="codeblock">import { StoatlyClient } from "stoatly.js";
 
 const client = new StoatlyClient({ prefix: "!" });
 
@@ -282,163 +260,83 @@ client.command({
   `,
 });
 
-client.login("YOUR_BOT_TOKEN");</code></pre>
-  </div>
+client.login("YOUR_BOT_TOKEN");</div>
+          <button class="copy-btn" data-copy='import { StoatlyClient } from "stoatly.js";
 
-  <!-- REQUIREMENTS -->
-  <div class="card">
-    <h2>⚙️ Requirements</h2>
-    <ul style="list-style: none; padding-left: 0;">
-      <li style="margin-bottom: 0.4rem;">• Node.js <strong>v22.15.0+</strong> (or Deno v2.2+)</li>
-      <li style="margin-bottom: 0.4rem;">• <code>stoatly.js</code> is an <strong>ES module</strong> — use <code>import</code>, not <code>require()</code>.</li>
-      <li>• If your project is CommonJS, either switch to <code>"type": "module"</code> or load with dynamic <code>import("stoatly.js")</code>.</li>
-    </ul>
-  </div>
+const client = new StoatlyClient({ prefix: "!" });
 
-  <!-- INSTALL -->
-  <div class="card">
-    <h2>📦 Install</h2>
-    <pre><code>npm install stoatly.js</code></pre>
-    <p style="margin-top: 0.3rem;"><code>stoat.js</code> ships as a dependency (pinned to <code>^7.3.6</code>). No need to install it separately.</p>
-    <p style="margin-top: 0.6rem;">For raw access to the underlying Stoat client: <code>client.client</code> gives you the <code>stoat.js</code> <code>Client</code> instance.</p>
-  </div>
+client.command({
+  name: "ping",
+  code: "Pong! $ping ms",
+});
 
-  <!-- DSL EXPLANATION -->
-  <div class="card">
-    <h2>🧩 How the DSL works</h2>
-    <ul style="list-style: none; padding-left: 0;">
-      <li style="margin-bottom: 0.5rem;">• <code>$functionName[arg1;arg2;...]</code> — calls a function with semicolon‑separated args.</li>
-      <li style="margin-bottom: 0.5rem;">• <code>$functionName</code> (no brackets) calls with zero args (e.g. <code>$ping</code>).</li>
-      <li style="margin-bottom: 0.5rem;">• Arguments can contain nested <code>$functions</code>.</li>
-      <li style="margin-bottom: 0.5rem;">• <code>$$</code> produces a literal <code>$</code>.</li>
-      <li style="margin-bottom: 0.5rem;">• Plain <code>[</code> / <code>]</code> are fine — the parser tracks bracket depth. But <code>;</code> always acts as a separator, so avoid stray semicolons inside arguments (use <code>$getVar</code>‑style separate args).</li>
-      <li>• <strong>Lazy functions</strong> (<code>$if</code>, <code>$onlyIf</code>, <code>$repeat</code>) get raw, unevaluated arguments so they can control evaluation (e.g. avoid side effects in the “else” branch).</li>
-    </ul>
-  </div>
+client.command({
+  name: "say",
+  aliases: ["echo"],
+  code: "$onlyIf[$argsCount>0;You need to give me something to say!]$sendMessage[$args]",
+});
 
-  <!-- BUILT-IN FUNCTIONS -->
-  <div class="card">
-    <h2>🔧 Built‑in functions</h2>
+client.command({
+  name: "score",
+  code: `
+    $if[$args[0]==add;
+      $addVar[score;1;$authorID]You're now at $getVar[score;0;$authorID] points!;
+      Your score is $getVar[score;0;$authorID]
+    ]
+  `,
+});
 
-    <h3 style="font-weight: 500; margin: 1.2rem 0 0.4rem; color: #c8c8dc;">Context / reading</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Function</th><th>Description</th></tr>
-        <tr><td><code>$message[index?]</code></td><td>Full message content, or a specific word by index</td></tr>
-        <tr><td><code>$args[index?]</code></td><td>All args joined, or one arg by index</td></tr>
-        <tr><td><code>$argsCount</code></td><td>Number of args passed to the command</td></tr>
-        <tr><td><code>$mention[index?]</code></td><td>Formats a mentioned user's ID as <code>&lt;@id&gt;</code></td></tr>
-        <tr><td><code>$authorID</code></td><td>ID of the message author</td></tr>
-        <tr><td><code>$username</code></td><td>Username of the message author</td></tr>
-        <tr><td><code>$channelID</code></td><td>Current channel ID</td></tr>
-        <tr><td><code>$serverID</code></td><td>Current server ID</td></tr>
-        <tr><td><code>$prefix</code></td><td>The prefix that triggered this command</td></tr>
-        <tr><td><code>$ping</code></td><td>Client latency in ms</td></tr>
-      </table>
+client.login("YOUR_BOT_TOKEN");'>Copy</button>
+      </div>
+
+      <div class="section-head" style="margin-top:44px;">
+        <h2 style="font-size:22px;">Development</h2>
+        <p>See <code>CONTRIBUTING.md</code> in the repo for how to add a new <code>$function</code>.</p>
+      </div>
+      <div class="dev-cmds">
+        <div class="codeblock-wrap"><div class="codeblock">npm install</div></div>
+        <div class="codeblock-wrap"><div class="codeblock">npm test</div></div>
+        <div class="codeblock-wrap"><div class="codeblock">npm run lint</div></div>
+      </div>
     </div>
+  </section>
 
-    <h3 style="font-weight: 500; margin: 1.6rem 0 0.4rem; color: #c8c8dc;">Actions</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Function</th><th>Description</th></tr>
-        <tr><td><code>$sendMessage[content;channelID?]</code></td><td>Sends a message</td></tr>
-        <tr><td><code>$reply[content]</code></td><td>Replies to the triggering message</td></tr>
-        <tr><td><code>$deleteMessage[delayMs?]</code></td><td>Deletes the last sent (or triggering) message</td></tr>
-        <tr><td><code>$editMessage[content]</code></td><td>Edits the last message sent via <code>$sendMessage</code></td></tr>
-        <tr><td><code>$addReaction[emoji]</code></td><td>Reacts to the last sent (or triggering) message</td></tr>
-        <tr><td><code>$dm[userID;content]</code></td><td>Sends a direct message to a user</td></tr>
-        <tr><td><code>$wait[ms]</code></td><td>Pauses execution</td></tr>
-      </table>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">stoatly.js</div>
+        <p class="foot-tagline">A string-based command framework for Stoat, the open-source chat platform formerly known as Revolt.</p>
+      </div>
+      <div>
+        <div class="foot-tagline" style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--fg-dim);">Docs</div>
+        <div class="foot-links" style="flex-direction:column; margin-top:8px; gap:8px;">
+          <a href="#quicklook">Quick look</a>
+          <a href="#install">Install</a>
+          <a href="#reference">Functions</a>
+          <a href="#custom">Custom functions</a>
+          <a href="#layout">Source layout</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-tagline" style="margin-top:0; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--fg-dim);">Project</div>
+        <div class="foot-links" style="flex-direction:column; margin-top:8px; gap:8px;">
+          <a href="https://github.com/stoatlyjs/stoatly.js" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.npmjs.com/package/stoatly.js" target="_blank" rel="noopener">npm</a>
+          <a href="https://stoatly.js.org" target="_blank" rel="noopener">stoatly.js.org</a>
+          <a href="https://stoat.chat" target="_blank" rel="noopener">Stoat</a>
+        </div>
+      </div>
     </div>
-
-    <h3 style="font-weight: 500; margin: 1.6rem 0 0.4rem; color: #c8c8dc;">Logic</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Function</th><th>Description</th></tr>
-        <tr><td><code>$if[condition;then;else?]</code></td><td>Branches; supports <code>==</code>,<code>!=</code>,<code>&gt;</code>,<code>&lt;</code>,<code>&gt;=</code>,<code>&lt;=</code>,<code>&amp;&amp;</code>,<code>||</code></td></tr>
-        <tr><td><code>$onlyIf[condition;errorMessage?]</code></td><td>Stops the command if the condition is false</td></tr>
-        <tr><td><code>$repeat[count;code]</code></td><td>Runs <code>code</code> up to <code>count</code> times (max 1000)</td></tr>
-        <tr><td><code>$loopIndex</code></td><td>Current index inside <code>$repeat</code> (0‑based)</td></tr>
-      </table>
-    </div>
-
-    <h3 style="font-weight: 500; margin: 1.6rem 0 0.4rem; color: #c8c8dc;">Variables</h3>
-    <p style="color:#a0a0b2; margin-bottom:0.4rem;">Persisted to a JSON file by default (swap in your own database).</p>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Function</th><th>Description</th></tr>
-        <tr><td><code>$setVar[name;value;scope?]</code></td><td>Stores a value (<code>scope</code> defaults to the server ID)</td></tr>
-        <tr><td><code>$getVar[name;fallback?;scope?]</code></td><td>Reads a value</td></tr>
-        <tr><td><code>$addVar[name;amount;scope?]</code> / <code>$subVar</code></td><td>Increments/decrements a numeric value</td></tr>
-        <tr><td><code>$deleteVar[name;scope?]</code></td><td>Deletes a value</td></tr>
-        <tr><td><code>$hasVar[name;scope?]</code></td><td><code>"true"</code> / <code>"false"</code></td></tr>
-      </table>
-    </div>
-
-    <h3 style="font-weight: 500; margin: 1.6rem 0 0.4rem; color: #c8c8dc;">Utility</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Function</th><th>Description</th></tr>
-        <tr><td><code>$math[expression]</code></td><td>Safe arithmetic: <code>+ - * / % ^ ()</code></td></tr>
-        <tr><td><code>$random[min;max]</code></td><td>Random integer, inclusive</td></tr>
-        <tr><td><code>$randomText[a;b;c;...]</code></td><td>Picks one argument at random</td></tr>
-        <tr><td><code>$upperCase[text]</code> / <code>$lowerCase</code></td><td>Case conversion</td></tr>
-        <tr><td><code>$comment[anything]</code></td><td>Evaluates to nothing (for notes in your code)</td></tr>
-        <tr><td><code>$newline</code></td><td>Inserts <code>\n</code></td></tr>
-      </table>
+    <div class="foot-bottom">
+      <span>MIT licensed</span>
+      <span>Built with <3</span>
     </div>
   </div>
+</footer>
 
-  <!-- CUSTOM FUNCTIONS + ESCAPING -->
-  <div class="card">
-    <h2>🧪 Custom functions</h2>
-    <pre><code>client.addFunction({
-  name: "double",
-  execute: (args) => String(Number(args[0]) * 2),
-});</code></pre>
-    <p style="margin-top: 0.6rem;">For lazy functions (like <code>$if</code>), set <code>lazy: true</code> and read <code>execute(rawArgNodes, ctx, evalNodes)</code>.</p>
-
-    <hr />
-
-    <h2>⏫ Escaping to raw stoat.js</h2>
-    <p>You can still listen to raw events directly:</p>
-    <pre><code>client.on("messageCreate", (message) => {
-  // full access to the underlying stoat.js Message object
-});</code></pre>
-    <p><code>client.client</code> gives you the underlying <code>stoat.js</code> <code>Client</code> instance for lower‑level access. The objects (users, channels, messages) are reactive — great for building a UI on top of a bot.</p>
-    <p style="margin-top:0.4rem;"><code>stoat.js</code> re‑exports raw Stoat API types under <code>API</code> (<code>import { API } from "stoat.js"</code>).</p>
-  </div>
-
-  <!-- PROJECT LAYOUT & DEVELOPMENT -->
-  <div class="card">
-    <h2>📁 Project layout</h2>
-    <pre><code>stoatly.js/
-  index.js                 - public exports
-  src/
-    StoatlyClient.js          - client, command registry, event wiring
-    parser.js                - turns "code" strings into an AST
-    Interpreter.js           - walks the AST, calls functions
-    expressions.js           - safe $math / $if condition evaluators
-    Database.js              - simple JSON-file variable store
-    functions/
-      context.js              - $message, $mention, $authorID, ...
-      actions.js              - $sendMessage, $reply, $wait, ...
-      logic.js                - $if, $onlyIf, $repeat
-      variables.js            - $setVar, $getVar, ...
-      utility.js              - $math, $random, ...</code></pre>
-
-    <h2 style="margin-top: 1.8rem;">🧑‍💻 Development</h2>
-    <pre><code>npm install
-npm test    # runs the test suite (node:test)
-npm run lint</code></pre>
-    <p>See <a href="#" style="color:#9b9bf0; text-decoration:none;">CONTRIBUTING.md</a> for how to add a new <code>$function</code>.</p>
-  </div>
-
-  <!-- FOOTER -->
-  <div class="footer">
-    MIT License · stoatly.js · built for Stoat
-  </div>
-
-</div>
+<script src="script.js"></script>
 </body>
-  </html>
+</html>
